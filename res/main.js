@@ -1,8 +1,19 @@
 var GVar = {
   state : 0,
-  original_code : "",
-  digested_code : ""
+  original_code : [],
+  digested_code : [],
 };
+
+function runStep(){
+  switch (GVar.state) {
+    case 0: break;
+    case 1:
+      preProcess();
+      break;
+    default:
+
+  }
+}
 
 function run(){
   code = S($('#code').val()).lines();
@@ -91,12 +102,18 @@ function run(){
   $("#result").val(result);
 }
 
+function processAbort(){
+  $("#play").attr("disabled", 'true');
+  $("#next").attr("disabled", 'true');
+}
+
 $("#init").click(function(){
   $("#editor").hide();
   $("#constructor").show();
 
   GVar.state = 0;
-  GVar.original_code = S($('#code').val()).lines();;
+  GVar.original_code = S($('#code').val()).lines();
+  GVar.digested_code = [];
 
   $("#runcode").empty();
   $("#runcode").append("<b>原始代码为：</b><br>");
@@ -112,7 +129,7 @@ $("#init").click(function(){
   GVar.state ++;
 });
 
-$()
+$('#next').click(runStep);
 
 $('#exit').click(function(){
   $("#editor").show();
