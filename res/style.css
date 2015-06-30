@@ -41,3 +41,23 @@ body {
   width: 100%;
   margin: 4px;
 }
+
+.cbll{
+  width: 100%;
+  background-color: #E0E0E0;
+}
+
+.cnorm{
+  width: 100%;
+  background-color: #D1FFBB;
+}
+
+.cerr{
+  width: 100%;
+  background-color: #FFAEAE;
+}
+
+.error_alert{
+  font-size: 30px;
+  color: red;
+}

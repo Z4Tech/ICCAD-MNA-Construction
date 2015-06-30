@@ -10,30 +10,78 @@
 */
 function preProcess(){
   var error = false;
+  var val;
 
   $("#runcode").empty();
   $("#runcode").append("<b>原始代码为：</b><br>");
 
-  $.each(GVar.original_code, function(i, item){
+  for(i in GVar.original_code){
     //将原始代码逐行处理
-
-    var currentLine = S(item).collapseWhitespace().s.split(' ');
+    var currentLine = S(GVar.original_code[i]).collapseWhitespace().s.split(' ');
 
     //空行跳过
     if(currentLine.length == 1 && S(currentLine[0]).isEmpty()){
       $("#runcode").append("<div class='cbll'>" + GVar.original_code[i] + "&nbsp;</div>");
-      return;
+      continue;
     }
 
-    //判断是否为合法器件（器件类型、器件节点数）
-    
+    //判断是否为合法器件（器件类型、器件节点数、器件数值）
+    switch (currentLine[0][0]){
+      //坏支路数
+      case 'R':
+      case 'I':
+      case 'V':
+      //检查器件节点
+        if(currentLine.length !=4){
+          error = true;
+          errLine(i);
+          continue;
+        }
+        checkNode(currentLine[1]);
+        checkNode(currentLine[2]);
+      //检查器件数值
+        val = numProcess(currentLine[3]);
+        if(val = 'err'){
+          error = true;
+          errLine(i);
+          continue;
+        }
 
-    //判断数值是否合法
+        break;
 
-    //转换数值单位
+      //坏支路数
+      case 'G':
+      case 'E':
+      case 'H':
+      case 'F':
+      //检查器件节点
+        if(currentLine.length !=6){
+          error = true;
+          errLine(i);
+          continue;
+        }
+        checkNode(currentLine[1]);
+        checkNode(currentLine[2]);
+        checkNode(currentLine[3]);
+        checkNode(currentLine[4]);
+      //检查器件数值
+        val = numProcess(currentLine[5]);
+        if(val = 'err'){
+          error = true;
+          errLine(i);
+          continue;
+        }
+
+        break;
+      default:
+        error = true;
+        errLine(i);
+        continue;
+    }
+
       GVar.digested_code.push(currentLine);
       $("#runcode").append("<div class='cnorm'>" + GVar.original_code[i] + "</div>");
-  });
+  }
 
   $("#result").empty();
 
@@ -41,6 +89,8 @@ function preProcess(){
     $("#result").append("<div class='col-md-12 error_alert'>网表代码有误，请检查</div>")
   }
   else{
+
+
     $("#result").append("<div class='col-md-6' id = 'netlist'></div>");
     $("#result").append("<div class='col-md-6' id = 'description'></div>");
     $("#netlist").append("<div><b>预处理后网表:</b></div>")
@@ -50,4 +100,19 @@ function preProcess(){
   }
 
   GVar.state++;
+
+  function checkNode(x){
+    if(!GVar.nodeDic[x]){
+      GVar.nodeDic[x] = true;
+      GVar.nodeList.push(x);
+    }
+  }
+
+  function numProcess(str){
+    return 'err';
+  }
+
+  function errLine(i){
+    $("#runcode").append("<div class='cerr'>" + GVar.original_code[i] + "&nbsp;</div>");
+  }
 }

@@ -2,8 +2,13 @@ var GVar = {
   state : 0,
   original_code : [],
   digested_code : [],
+  netNode : 0,
+  nodeDic : {},
+  nodeList: [],
+  BCENum: 0
 };
 
+//下一步
 function runStep(){
   switch (GVar.state) {
     case 0: break;
@@ -107,13 +112,19 @@ function processAbort(){
   $("#next").attr("disabled", 'true');
 }
 
+//初始化工作
 $("#init").click(function(){
   $("#editor").hide();
   $("#constructor").show();
 
+//置零
   GVar.state = 0;
   GVar.original_code = S($('#code').val()).lines();
   GVar.digested_code = [];
+  GVar.netNode = 0;
+  GVar.nodeDic = {};
+  GVar.nodeList = [];
+  GVar.BCENum = 0;
 
   $("#runcode").empty();
   $("#runcode").append("<b>原始代码为：</b><br>");
@@ -126,7 +137,7 @@ $("#init").click(function(){
   $("#play").removeAttr("disabled");
   $("#next").removeAttr("disabled");
 
-  GVar.state ++;
+  GVar.state++;
 });
 
 $('#next').click(runStep);
