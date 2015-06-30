@@ -30,7 +30,7 @@ function preProcess(){
       //坏支路数
       case 'R':
       case 'I':
-      case 'V':
+      case 'V': BCENum += 1;
       //检查器件节点
         if(currentLine.length !=4){
           error = true;
@@ -51,9 +51,9 @@ function preProcess(){
 
       //坏支路数
       case 'G':
-      case 'E':
-      case 'H':
-      case 'F':
+      case 'E': BCENum += 1;
+      case 'H': BCENum += 2;
+      case 'F': BCENum += 1;
       //检查器件节点
         if(currentLine.length !=6){
           error = true;
