@@ -25,12 +25,12 @@ function preProcess(){
       continue;
     }
 
+    var device = currentLine[0][0];
     //判断是否为合法器件（器件类型、器件节点数、器件数值）
-    switch (currentLine[0][0]){
-      //坏支路数
+    switch (device){
       case 'R':
       case 'I':
-      case 'V': BCENum += 1;
+      case 'V':
       //检查器件节点
         if(currentLine.length !=4){
           error = true;
@@ -41,19 +41,20 @@ function preProcess(){
         checkNode(currentLine[2]);
       //检查器件数值
         val = numProcess(currentLine[3]);
-        if(val = 'err'){
+        if(val == 'err'){
           error = true;
           errLine(i);
           continue;
         }
-
+        currentLine[3] = val;
+        //坏支路数
+        if(device == 'V') GVar.BCENum += 1;
         break;
 
-      //坏支路数
       case 'G':
-      case 'E': BCENum += 1;
-      case 'H': BCENum += 2;
-      case 'F': BCENum += 1;
+      case 'E':
+      case 'H':
+      case 'F':
       //检查器件节点
         if(currentLine.length !=6){
           error = true;
@@ -66,12 +67,15 @@ function preProcess(){
         checkNode(currentLine[4]);
       //检查器件数值
         val = numProcess(currentLine[5]);
-        if(val = 'err'){
+        if(val == 'err'){
           error = true;
           errLine(i);
           continue;
         }
-
+        currentLine[5] = val;
+      //坏支路数
+        if(device == 'E' || device =='F') GVar.BCENum += 1;
+        else if(device == 'H') GVar.BCENum += 2;
         break;
       default:
         error = true;
@@ -86,17 +90,23 @@ function preProcess(){
   $("#result").empty();
 
   if(error){
-    $("#result").append("<div class='col-md-12 error_alert'>网表代码有误，请检查</div>")
+    $("#result").append("<div class='col-md-12 error_alert'>网表代码有误，请检查</div>");
   }
   else{
-
-
     $("#result").append("<div class='col-md-6' id = 'netlist'></div>");
     $("#result").append("<div class='col-md-6' id = 'description'></div>");
     $("#netlist").append("<div><b>预处理后网表:</b></div>")
     for(i in GVar.digested_code){
-      $("#netlist").append("<div>" + GVar.digested_code[i].join(" ") + "</div>")
+      $("#netlist").append("<div>" + GVar.digested_code[i].join(" ") + "</div>");
     }
+
+    GVar.nodeList.sort();
+    if(GVar.nodeDic['0']) GVar.GND = '0';
+    else GVar.GND = nodeList[0];
+
+    $("#description").append("<div>共有<b>" + GVar.nodeList.length + "</b>个节点</div>");
+    $("#description").append("<div>共有<b>" + GVar.BCENum + "</b>条坏支路</div>");
+    $("#description").append("<div>选取<b>" + GVar.GND + "</b>节点为GND</div>");
   }
 
   GVar.state++;
@@ -109,7 +119,39 @@ function preProcess(){
   }
 
   function numProcess(str){
-    return 'err';
+    var reg = new RegExp("^[-+]?[0-9]*.?[0-9]+([eE][-+]?[0-9]+)?[GMKkmunpf]?$");
+    if(!reg.test(str)){
+      console.log(str + '不是数字');
+      return 'err';
+    }
+    var val = parseFloat(str);
+    var unitReg = new RegExp("[GMKkmunpf]");
+    var unit = str.match(unitReg);
+    console.log(unit);
+    if(unit){
+      switch (unit[0]) {
+        case 'G': val*=1e9;
+          break;
+        case 'M': val*=1e6;
+          break;
+        case 'K':
+        case 'k':
+          val*=1e3;
+          break;
+        case 'm': val*=1e-3;
+          break;
+        case 'u': val*=1e-6;
+          break;
+        case 'n': val*=1e-9;
+          break;
+        case 'p': val*=1e-12;
+          break;
+        case 'f': val*=1e-15;
+          break;
+        default:
+      }
+    }
+    return val;
   }
 
   function errLine(i){

@@ -5,7 +5,8 @@ var GVar = {
   netNode : 0,
   nodeDic : {},
   nodeList: [],
-  BCENum: 0
+  BCENum: 0,
+  GND : '0'
 };
 
 //下一步
@@ -125,6 +126,7 @@ $("#init").click(function(){
   GVar.nodeDic = {};
   GVar.nodeList = [];
   GVar.BCENum = 0;
+  GVar.GND = 0;
 
   $("#runcode").empty();
   $("#runcode").append("<b>原始代码为：</b><br>");
