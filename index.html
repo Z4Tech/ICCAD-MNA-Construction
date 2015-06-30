@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>MNA建立</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="./res/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="./res/style.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <!-- Begin page content -->
+    <div class="container" id="editor">
+      <div class="page-header">
+        <h1>MNA填值</h1>
+      </div>
+
+      <p class="lead">在下面输入代码：
+      <textarea class="form-control" id="code">
+I1 1 0 1
+R2 1 2 100
+R3 2 3 1k
+R4 1 4 2k
+R5 2 4 50
+G6 1 2 3 4 100
+R7 4 0 200
+R8 3 0 300
+      </textarea>
+      <br>
+      <button class="btn btn-primary" id = "init">初始化</button>
+    </div>
+
+    <div class="container" id="constructor">
+      <div class="page-header">
+        <h1>运行模式</h1>
+      </div>
+      <div class="row">
+        <div id="runcode" class="col-md-5">
+          <div class="lead">haha</div>
+        </div>
+        <div id="result" class="col-md-5">
+          gaga
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-primary" id = "next">单步</button>
+          <button class="btn btn-success" id = "play">运行</button>
+        <button class="btn btn-danger" id = "exit">结束返回</button>
+        </div>
+    </div>
+    </div>
+
+    <div class="footer">
+      <div class="container">
+        <p class="text-muted">张辰光 1200012848</p>
+      </div>
+    </div>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <script src="./res/jquery.min.js"></script>
+    <script src="./res/bootstrap.min.js"></script>
+    <script src="./res/string.min.js"></script>
+    <script src="./res/main.js"></script>
+    <!-- Placed at the end of the document so the pages load faster -->
+  </body>
+</html>
