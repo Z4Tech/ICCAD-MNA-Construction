@@ -1,3 +1,9 @@
+var GVar = {
+  state : 0,
+  original_code : "",
+  digested_code : ""
+};
+
 function run(){
   code = S($('#code').val()).lines();
   prog = [];
@@ -85,13 +91,30 @@ function run(){
   $("#result").val(result);
 }
 
-
-function init(){
+$("#init").click(function(){
   $("#editor").hide();
   $("#constructor").show();
 
+  GVar.state = 0;
+  GVar.original_code = S($('#code').val()).lines();;
+
+  $("#runcode").empty();
+  $("#runcode").append("<b>原始代码为：</b><br>");
+  for(i in GVar.original_code){
+    $("#runcode").append(GVar.original_code[i] + "<br>");
+  }
+
+  $("#result").empty();
+
   $("#play").removeAttr("disabled");
   $("#next").removeAttr("disabled");
-}
 
-$("#init").click(init);
+  GVar.state ++;
+});
+
+$()
+
+$('#exit').click(function(){
+  $("#editor").show();
+  $("#constructor").hide();
+});
